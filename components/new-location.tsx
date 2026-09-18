@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "./ui/button";
 import { addLocation } from "@/lib/actions/add-location";
 import { cn } from "@/lib/utils";
@@ -8,7 +8,8 @@ import { MapPin, Plus } from "lucide-react";
 import Link from "next/link";
 
 export default function NewLocationClient({ tripId }: { tripId: string }) {
-  const [isPending, startTransation] = useTransition();
+  const [isPending, startTransition] = useTransition();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   return (
     <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center p-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -21,11 +22,21 @@ export default function NewLocationClient({ tripId }: { tripId: string }) {
         </div>
 
         <div className="glass rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-border/50">
+          {errorMessage && (
+            <div className="mb-6 p-4 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive text-sm font-bold text-center animate-in fade-in">
+              {errorMessage}
+            </div>
+          )}
+
           <form
             className="space-y-8"
             action={(formData: FormData) => {
-              startTransation(() => {
-                addLocation(formData, tripId);
+              setErrorMessage(null);
+              startTransition(async () => {
+                const res = await addLocation(formData, tripId);
+                if (res?.error) {
+                  setErrorMessage(res.error);
+                }
               });
             }}
           >

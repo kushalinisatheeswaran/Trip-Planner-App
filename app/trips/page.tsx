@@ -139,7 +139,7 @@ export default async function TripsPage() {
                         <Calendar className="w-4 h-4" />
                       </div>
                       <div className="text-sm font-bold text-foreground/80">
-                        {new Date(trip.startDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} - {new Date(trip.endDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                        {new Date(trip.startDate).toLocaleDateString("en-US", { month: 'short', day: 'numeric', timeZone: 'UTC' })} - {new Date(trip.endDate).toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
                       </div>
                     </div>
                   </div>

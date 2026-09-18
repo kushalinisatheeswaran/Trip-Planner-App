@@ -5,9 +5,9 @@ import { prisma } from "@/lib/prisma";
 export default async function TripDetail({
   params,
 }: {
-  params: Promise<{ tripId: string }>;
+  params: Promise<{ tripid: string }>;
 }) {
-  const { tripId } = await params;
+  const { tripid } = await params;
 
   const session = await auth();
 
@@ -16,7 +16,7 @@ export default async function TripDetail({
   }
 
   const trip = await prisma.trip.findFirst({
-    where: { id: tripId, userId: session.user?.id },
+    where: { id: tripid, userId: session.user?.id },
     include: { locations: true },
   });
 

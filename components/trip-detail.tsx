@@ -47,7 +47,7 @@ export default function TripDetailClient({ trip }: TripDetailClientProps) {
                 <div className="inline-flex items-center gap-2 glass px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-foreground/80">
                    <Calendar className="w-3.5 h-3.5 text-secondary" />
                    <span>
-                     {trip.startDate.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })} - {trip.endDate.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
+                     {new Date(trip.startDate).toLocaleDateString("en-US", { month: 'long', day: 'numeric', timeZone: 'UTC' })} - {new Date(trip.endDate).toLocaleDateString("en-US", { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
                    </span>
                 </div>
                 <h1 className="text-5xl md:text-7xl font-extrabold text-foreground tracking-tight drop-shadow-sm">

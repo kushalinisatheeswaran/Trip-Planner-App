@@ -46,17 +46,26 @@ export async function addLocation(formData: FormData, tripId: string) {
   const session = await auth();
 
   if (!session?.user?.id) {
-    throw new Error("Not authenticated");
+    return { error: "Not authenticated" };
   }
 
   const address = formData.get("address")?.toString();
 
   if (!address || address.trim().length < 2) {
-    throw new Error("Invalid or missing address");
+    return { error: "Invalid or missing address" };
   }
 
-  // 🔥 Get coordinates safely
-  const { lat, lng } = await geocodeAddress(address);
+  let lat: number;
+  let lng: number;
+
+  try {
+    const coords = await geocodeAddress(address);
+    lat = coords.lat;
+    lng = coords.lng;
+  } catch (err: any) {
+    console.error("Add location error:", err?.message || err);
+    return { error: "Unable to find this destination right now. Please verify your Google Cloud Maps billing and API status." };
+  }
 
   // Get order index
   const count = await prisma.location.count({
