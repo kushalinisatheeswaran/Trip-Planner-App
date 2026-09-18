@@ -2,6 +2,20 @@ import { auth } from "@/auth";
 import { getCountryFromCoordinates } from "@/lib/actions/geocode";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
+
+type LocationPayload = Prisma.LocationGetPayload<{
+  select: {
+    locationTitle: true;
+    lat: true;
+    lng: true;
+    trip: {
+      select: {
+        title: true;
+      };
+    };
+  };
+}>;
 
 export async function GET() {
   try {
@@ -29,7 +43,7 @@ export async function GET() {
     });
 
     const transformedLocations = await Promise.all(
-      locations.map(async (loc) => {
+      locations.map(async (loc: LocationPayload) => {
         const geocodeResult = await getCountryFromCoordinates(loc.lat, loc.lng);
 
         return {
